@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LoginImage from "../assets/images/LoginImage.jpg";
 import GoogleIcon from "../assets/images/googleIcon.png";
-// import Loadar from '../components/Loadar';
+import Loadar from "../components/Loadar";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -11,7 +11,13 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/");
+    }, 2000);
+  };
   return (
     <div className=" w-4/5 mx-auto  h-full shadow-lg py-4 ">
       <div
@@ -50,7 +56,7 @@ export default function LoginPage() {
           />
 
           <p className="text-center">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link to="/signup" className="text-blue-500">
               {" "}
               Sign Up
@@ -58,6 +64,7 @@ export default function LoginPage() {
           </p>
 
           {
+            loading ? <Loadar /> :
             <button
               className="p-2 bg-blue-500 text-white rounded-lg"
               onClick={handleLogin}
