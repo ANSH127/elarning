@@ -4,6 +4,9 @@ import { client } from "../api/SanityClient";
 
 import PortableText from "react-portable-text";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import Avatar from "../assets/images/Avatar1.jpg";
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
@@ -16,9 +19,40 @@ export default function CourseDetailPage() {
   const [notes, setNotes] = React.useState([]);
   const navigate = useNavigate();
 
-  const handleSubmitQuestion = async () => {};
+  const fetchQuestions = async () => {
+
+    if (!localStorage.getItem("user")) {
+      alert("Please login to continue");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/api/comments?slug=${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        }
+      );
+      const data = await response.data;
+      setQuestions(data.comments);
+      // console.log(data.comments);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
 
   const fetchCourseDetail = async () => {
+    if (!localStorage.getItem("user")) {
+      alert("Please login to continue");
+      navigate("/login");
+      return;
+    }
     const query = `*[_type == "courses" && slug.current == "${courseId}"]{
             title,
             content,
@@ -27,15 +61,39 @@ export default function CourseDetailPage() {
             mcq
         }`;
     const course = await client.fetch(query);
-    // console.log(course[0].mcq);
     setCourse(course[0]);
     setLoading(false);
   };
+
+  const handleSubmitQuestion = async () => {
+    try{
+      const response = await axios.post(`http://localhost:4000/api/addcomment`, {
+        comment: question,
+        slug: courseId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      });
+      const data = await response.data;
+      setQuestions([...questions, data.newComment]);
+      setQuestion("");
+    }
+    catch(err){
+      alert(err.message);
+    }
+
+
+  };
+
 
   const handleSubmitNotes = async () => {};
 
   React.useEffect(() => {
     fetchCourseDetail();
+    fetchQuestions();
 
     // eslint-disable-next-line
   }, [courseId]);
@@ -56,7 +114,6 @@ export default function CourseDetailPage() {
               height="400px"
               src={course && course.url}
               title="YouTube video player"
-              
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
@@ -151,13 +208,13 @@ export default function CourseDetailPage() {
                   <div key={i} className="p-4 w-3/4 shadow rounded-lg mb-4">
                     <div className="flex flex-row justify-start items-center gap-4">
                       <img
-                        src="/images/Avatar1.jpg"
+                        src={Avatar}
                         alt="profile"
                         className="w-12 h-12 rounded-full"
                       />
                       <div>
-                        <h1 className="text-lg font-bold">John Doe</h1>
-                        <p className="text-sm text-gray-500">{q.comment}</p>
+                        <h1 className="text-lg font-bold">{q?.user?.name}</h1>
+                        <p className="text-sm text-gray-500">{q?.comment}</p>
                       </div>
                     </div>
                   </div>

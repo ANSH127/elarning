@@ -4,6 +4,7 @@ import LoginImage from "../assets/images/LoginImage.jpg";
 import GoogleIcon from "../assets/images/googleIcon.png";
 import Loadar from "../components/Loadar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -12,11 +13,27 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
 
   const handleLogin = async () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    if (!email || !password) {
+      alert("Please fill all the fields");
+      return;
+    }
+    try {
+      setLoading(true);
+
+      const response = await axios.post(`http://localhost:4000/api/login`, {
+        email,
+        password,
+      });
+      const data = await response.data;
+      // console.log(data);
+      localStorage.setItem("user", JSON.stringify(data));
       navigate("/");
-    }, 2000);
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className=" w-4/5 mx-auto  h-full shadow-lg py-4 ">
@@ -63,15 +80,16 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          {
-            loading ? <Loadar /> :
+          {loading ? (
+            <Loadar />
+          ) : (
             <button
               className="p-2 bg-blue-500 text-white rounded-lg"
               onClick={handleLogin}
             >
               Sign In
             </button>
-          }
+          )}
 
           <h3 className="text-center">Or</h3>
           <div className="flex justify-center gap-4">

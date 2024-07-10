@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import SignUpImage from "../assets/images/signupImage.jpg";
 import GoogleIcon from "../assets/images/googleIcon.png";
 
+import axios from "axios";
+
 export default function SignUpPage() {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -17,11 +19,30 @@ export default function SignUpPage() {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    if (!name || !email || !password || !role) {
+      alert("Please fill all the fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(`http://localhost:4000/api/signup`, {
+        name,
+        email,
+        password,
+        role,
+      });
+      const data = await response.data;
+      console.log(data);
       navigate("/login");
-    }, 2000);
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+
+    }
   };
   return (
     <div className=" w-4/5 mx-auto h-full shadow-lg py-4">

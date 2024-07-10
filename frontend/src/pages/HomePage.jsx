@@ -12,7 +12,15 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   const fetchCourse = async () => {
-    let category = "cse";
+
+    if(!localStorage.getItem('user')){
+      alert('Please login to continue')
+      navigate('/login')
+      return;
+    }
+
+
+    let category = JSON.parse(localStorage.getItem('user')).role;
     const query = `*[_type == "courses" && category =="${category}"]`;
     const courses = await client.fetch(query);
     // console.log(courses);
