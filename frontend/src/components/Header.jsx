@@ -36,7 +36,7 @@ function Header() {
 
   return (
     <div 
-    className=" w-11/12 mx-auto">
+    className=" w-4/5 mx-auto">
 
       
     <AppBar position="static"  sx={{

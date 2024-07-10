@@ -10,6 +10,7 @@ import {
 
 import HomePage from './pages/HomePage';
 import Header from './components/Header';
+import LoginPage from './pages/LoginPage';
 
 
 
@@ -22,6 +23,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
 
       </Routes>
     </Router>
