@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { client } from "../api/SanityClient";
 
 import Loadar from "../components/Loadar";
-// import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function HomePage() {
   const [courses, setCourses] = useState([]);
@@ -12,15 +13,14 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   const fetchCourse = async () => {
-
-    if(!localStorage.getItem('user')){
-      alert('Please login to continue')
-      navigate('/login')
+    // console.log(import.meta.env.VITE_SANITY_PROJECT_ID);
+    if (!localStorage.getItem("user")) {
+      toast.error("Please login to continue");
+      navigate("/login");
       return;
     }
 
-
-    let category = JSON.parse(localStorage.getItem('user')).role;
+    let category = JSON.parse(localStorage.getItem("user")).role;
     const query = `*[_type == "courses" && category =="${category}"]`;
     const courses = await client.fetch(query);
     // console.log(courses);
@@ -39,10 +39,7 @@ export default function HomePage() {
         <Loadar />
       ) : (
         <>
-          <div
-            className="mb-4  p-4 flex flex-wrap gap-y-4  justify-around"
-            
-          >
+          <div className="mb-4  p-4 flex flex-wrap gap-y-4  justify-around">
             {courses.length === 0 && (
               <h1 className="text-2xl  font-bold text-gray-800 p-y-4 text-center">
                 No courses found
@@ -55,6 +52,21 @@ export default function HomePage() {
           </div>
         </>
       )}
+
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Zoom}
+        limit={1}
+      />
     </div>
   );
 }

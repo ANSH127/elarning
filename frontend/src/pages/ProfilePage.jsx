@@ -6,13 +6,16 @@ import axios from "axios";
 import Avatar from "../assets/images/Avatar1.jpg";
 import SadFace from "../assets/images/sad-face.png";
 
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   const fetchUserDetails = async () => {
     if (!localStorage.getItem("user")) {
-      alert("You are not logged in");
+      toast.warning("You are not logged in");
       navigate("/login");
 
       return;
@@ -34,6 +37,7 @@ export default function ProfilePage() {
       setUser(data.user);
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -108,6 +112,21 @@ export default function ProfilePage() {
             </button>
           </div>
         )}
+
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Zoom}
+          limit={1}
+        />
       </div>
     </>
   );

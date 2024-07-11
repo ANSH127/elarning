@@ -8,6 +8,10 @@ import axios from "axios";
 
 import Avatar from "../assets/images/Avatar1.jpg";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function CourseDetailPage() {
   const { courseId } = useParams();
   const [course, setCourse] = React.useState(null);
@@ -21,7 +25,7 @@ export default function CourseDetailPage() {
 
   const fetchCourseDetail = async () => {
     if (!localStorage.getItem("user")) {
-      alert("Please login to continue");
+      toast.warning("Please login to continue");
       navigate("/login");
       return;
     }
@@ -40,7 +44,7 @@ export default function CourseDetailPage() {
 
   const fetchQuestions = async () => {
     if (!localStorage.getItem("user")) {
-      alert("Please login to continue");
+      toast.warning("Please login to continue");
       navigate("/login");
       return;
     }
@@ -60,7 +64,7 @@ export default function CourseDetailPage() {
       setQuestions(data.comments);
       // console.log(data.comments);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -84,7 +88,7 @@ export default function CourseDetailPage() {
       setQuestions([...questions, data.newComment]);
       setQuestion("");
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -101,7 +105,7 @@ export default function CourseDetailPage() {
       // console.log(data.notes);
       setNotes(data.notes);
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -125,7 +129,7 @@ export default function CourseDetailPage() {
       setNotes([...notes, data.newNote]);
       setNotesInput("");
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -142,10 +146,10 @@ export default function CourseDetailPage() {
         }
       );
       const data = await response.data;
-      alert(data.message);
+      toast.success(data.message);
       setNotes(notes.filter((n) => n._id !== id));
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -335,6 +339,21 @@ export default function CourseDetailPage() {
             </div>
           )}
         </div>
+
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Zoom}
+          limit={1}
+        />
       </div>
     )
   );

@@ -5,6 +5,8 @@ import GoogleIcon from "../assets/images/googleIcon.png";
 import Loadar from "../components/Loadar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("Please fill all the fields");
+      toast.warning("Please fill all the fields");
       return;
     }
     try {
@@ -30,7 +32,7 @@ export default function LoginPage() {
       navigate("/");
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -101,6 +103,20 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Zoom}
+        limit={1}
+      />
     </div>
   );
 }

@@ -10,6 +10,8 @@ import GoogleIcon from "../assets/images/googleIcon.png";
 
 import axios from "axios";
 
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function SignUpPage() {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -20,7 +22,7 @@ export default function SignUpPage() {
 
   const handleSubmit = async () => {
     if (!name || !email || !password || !role) {
-      alert("Please fill all the fields");
+      toast.warning("Please fill all the fields");
       return;
     }
 
@@ -38,10 +40,9 @@ export default function SignUpPage() {
       navigate("/login");
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
-
     }
   };
   return (
@@ -127,6 +128,20 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Zoom}
+        limit={1}
+      />
     </div>
   );
 }
