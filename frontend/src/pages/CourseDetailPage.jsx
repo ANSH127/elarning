@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Avatar from "../assets/images/Avatar1.jpg";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 export default function CourseDetailPage() {
   const { courseId } = useParams();
   const [course, setCourse] = React.useState(null);
@@ -19,8 +19,26 @@ export default function CourseDetailPage() {
   const [notes, setNotes] = React.useState([]);
   const navigate = useNavigate();
 
-  const fetchQuestions = async () => {
+  const fetchCourseDetail = async () => {
+    if (!localStorage.getItem("user")) {
+      alert("Please login to continue");
+      navigate("/login");
+      return;
+    }
+    const query = `*[_type == "courses" && slug.current == "${courseId}"]{
+            title,
+            content,
+            url,
+            "notes": notes.asset->url,
+            mcq
+        }`;
+    const course = await client.fetch(query);
+    // console.log(course[0]);
+    setCourse(course[0]);
+    setLoading(false);
+  };
 
+  const fetchQuestions = async () => {
     if (!localStorage.getItem("user")) {
       alert("Please login to continue");
       navigate("/login");
@@ -46,31 +64,33 @@ export default function CourseDetailPage() {
     }
   };
 
-
-  const fetchCourseDetail = async () => {
-    if (!localStorage.getItem("user")) {
-      alert("Please login to continue");
-      navigate("/login");
-      return;
+  const handleSubmitQuestion = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/addcomment`,
+        {
+          comment: question,
+          slug: courseId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        }
+      );
+      const data = await response.data;
+      setQuestions([...questions, data.newComment]);
+      setQuestion("");
+    } catch (err) {
+      alert(err.message);
     }
-    const query = `*[_type == "courses" && slug.current == "${courseId}"]{
-            title,
-            content,
-            url,
-            "notes": notes.asset->url,
-            mcq
-        }`;
-    const course = await client.fetch(query);
-    setCourse(course[0]);
-    setLoading(false);
   };
 
-  const handleSubmitQuestion = async () => {
-    try{
-      const response = await axios.post(`http://localhost:4000/api/addcomment`, {
-        comment: question,
-        slug: courseId,
-      }, {
+  const fetchNotes = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/api/notes`, {
         headers: {
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("user")).token
@@ -78,22 +98,61 @@ export default function CourseDetailPage() {
         },
       });
       const data = await response.data;
-      setQuestions([...questions, data.newComment]);
-      setQuestion("");
+      // console.log(data.notes);
+      setNotes(data.notes);
+    } catch (error) {
+      alert(error.message);
     }
-    catch(err){
-      alert(err.message);
-    }
-
-
   };
 
+  const handleSubmitNotes = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/addnote`,
+        {
+          title: course.title,
+          note: notesInput,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        }
+      );
+      const data = await response.data;
+      setNotes([...notes, data.newNote]);
+      setNotesInput("");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
-  const handleSubmitNotes = async () => {};
+  const deleteNote = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/deletenote/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        }
+      );
+      const data = await response.data;
+      alert(data.message);
+      setNotes(notes.filter((n) => n._id !== id));
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   React.useEffect(() => {
     fetchCourseDetail();
     fetchQuestions();
+    fetchNotes();
 
     // eslint-disable-next-line
   }, [courseId]);
@@ -243,7 +302,7 @@ export default function CourseDetailPage() {
               <h1 className="text-2xl font-bold">Write Notes</h1>
               <div className="flex flex-row justify-start items-center gap-4">
                 <textarea
-                  className="p-2 w-3/4 border-2 border-gray-300 rounded-lg"
+                  className="p-2 my-4 w-full border-2 border-gray-300 rounded-lg"
                   placeholder="Write notes"
                   value={notesInput}
                   onChange={(e) => setNotesInput(e.target.value)}
@@ -256,11 +315,20 @@ export default function CourseDetailPage() {
                 </button>
               </div>
 
-              <div className="p-4">
+              <div className="p-2 flex flex-wrap gap-2 ">
                 {notes.map((n, i) => (
-                  <div key={i} className="p-4 w-3/4 shadow rounded-lg mb-4">
-                    <h1 className="text-lg font-bold">{n.title}</h1>
-                    <p className="text-sm text-gray-500">{n.note}</p>
+                  <div key={i} className="p-4 w-72 shadow rounded-lg ">
+                    <div className="flex flex-row  rounded-lg bg-blue-100 p-2">
+                      <h6 className=" text-xs  font-bold">{n.title}</h6>
+                      <DeleteIcon
+                        onClick={() => deleteNote(n._id)}
+                        className="text-red-500 cursor-pointer"
+                      />
+                    </div>
+
+                    <p className="text-md text-black font-semibold p-2">
+                      {n.note}
+                    </p>
                   </div>
                 ))}
               </div>

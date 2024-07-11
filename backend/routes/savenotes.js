@@ -15,4 +15,8 @@ router.get('/notes', SaveNoteControllers.getAllNotes);
 // add note
 router.post('/addnote', SaveNoteControllers.addNote);
 
+// delete note
+
+router.delete('/deletenote/:id', SaveNoteControllers.deleteNote);
+
 module.exports = router;

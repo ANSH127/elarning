@@ -4,12 +4,20 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Avatar from "../assets/images/Avatar1.jpg";
+import SadFace from "../assets/images/sad-face.png";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   const fetchUserDetails = async () => {
+    if (!localStorage.getItem("user")) {
+      alert("You are not logged in");
+      navigate("/login");
+
+      return;
+    }
+
     try {
       const response = await axios.get(
         "http://localhost:4000/api/userdetails",
@@ -47,7 +55,7 @@ export default function ProfilePage() {
         {/* // user profile */}
         <div className="items-center justify-center flex flex-col py-4">
           <img
-            src={user ? Avatar : "/images/sad-face.png"}
+            src={user ? Avatar : SadFace}
             alt="profile"
             className="rounded-full hover:border-2 border-blue-500"
             width="150"
@@ -88,14 +96,16 @@ export default function ProfilePage() {
           />
         </div>
         {/* // logout button */}
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={logout}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          >
-            Logout
-          </button>
-        </div>
+        {user && (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={logout}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
