@@ -29,6 +29,8 @@ export default function HomePage() {
   };
   useEffect(() => {
     fetchCourse();
+
+    // eslint-disable-next-line
   }, []);
 
   return (
