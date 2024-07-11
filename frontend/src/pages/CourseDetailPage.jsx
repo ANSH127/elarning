@@ -319,7 +319,7 @@ export default function CourseDetailPage() {
                 </button>
               </div>
 
-              <div className="p-2 flex flex-wrap gap-2 ">
+              <div className="p-2 flex flex-wrap gap-2 justify-start ">
                 {notes.map((n, i) => (
                   <div key={i} className="p-4 w-72 shadow rounded-lg ">
                     <div className="flex flex-row  rounded-lg bg-blue-100 p-2">

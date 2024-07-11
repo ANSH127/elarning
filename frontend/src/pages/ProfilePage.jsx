@@ -55,7 +55,7 @@ export default function ProfilePage() {
   return (
     // <div>ProfilePage</div>
     <>
-      <div className="sm:w-4/5 w-full mx-auto py-4  h-full shadow-lg">
+      <div className="sm:w-4/5 w-full mx-auto py-4 h-screen shadow-lg">
         {/* // main content */}
 
         {/* // user profile */}
