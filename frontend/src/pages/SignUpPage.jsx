@@ -45,7 +45,7 @@ export default function SignUpPage() {
     }
   };
   return (
-    <div className=" w-4/5 mx-auto h-full shadow-lg py-4">
+    <div className="sm:w-4/5 w-full mx-auto h-full shadow-lg py-4">
       <div
         className=" overflow-y-auto overflow-x-hidden"
         style={{

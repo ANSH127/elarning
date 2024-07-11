@@ -159,7 +159,7 @@ export default function CourseDetailPage() {
 
   return (
     !loading && (
-      <div className="w-4/5 mx-auto mb-5 my-4 shadow-lg ">
+      <div className="sm:w-4/5 w-full mx-auto mb-5 my-4 shadow-lg ">
         <div
           className="mb-4  overflow-y-auto overflow-x-hidden p-4  gap-2"
           style={{

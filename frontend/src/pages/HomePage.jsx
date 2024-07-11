@@ -32,7 +32,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="w-4/5 mx-auto  h-full my-4 shadow-lg  ">
+    <div className="sm:w-4/5 w-full mx-auto  h-full my-4 shadow-lg  ">
       {loading ? (
         <Loadar />
       ) : (

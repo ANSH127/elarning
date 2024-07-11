@@ -63,7 +63,7 @@ function Header() {
   const isAuthenticated = localStorage.getItem("user") ? true : false;
 
   return (
-    <div className=" w-4/5 mx-auto">
+    <div className=" sm:w-4/5 w-full mx-auto">
       <AppBar
         position="static"
         sx={{
