@@ -22,7 +22,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const response = await axios.post(`http://localhost:4000/api/login`, {
+      const response = await axios.post(`https://elarning.onrender.com/api/login`, {
         email,
         password,
       });
