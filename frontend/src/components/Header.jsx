@@ -25,6 +25,11 @@ const settings = [
     showOnAuth: true,
   },
   {
+    name:'Chatbot',
+    path:'/chatbot',
+    showOnAuth:true
+  },
+  {
     name: "Login",
     path: "/login",
     showOnAuth: false,
