@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
     try {
       const response = await axios.get(
-        "https://elarning.onrender.com/api/userdetails",
+        "http://localhost:3000/api/userdetails",
         {
           headers: {
             Authorization: `Bearer ${

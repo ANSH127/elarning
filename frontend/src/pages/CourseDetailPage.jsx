@@ -51,7 +51,7 @@ export default function CourseDetailPage() {
 
     try {
       const response = await axios.get(
-        `https://elarning.onrender.com/api/comments?slug=${courseId}`,
+        `http://localhost:3000/api/comments?slug=${courseId}`,
         {
           headers: {
             Authorization: `Bearer ${
@@ -71,7 +71,7 @@ export default function CourseDetailPage() {
   const handleSubmitQuestion = async () => {
     try {
       const response = await axios.post(
-        `https://elarning.onrender.com/api/addcomment`,
+        `http://localhost:3000/api/addcomment`,
         {
           comment: question,
           slug: courseId,
@@ -94,7 +94,7 @@ export default function CourseDetailPage() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://elarning.onrender.com/api/notes`, {
+      const response = await axios.get(`http://localhost:3000/api/notes`, {
         headers: {
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("user")).token
@@ -112,7 +112,7 @@ export default function CourseDetailPage() {
   const handleSubmitNotes = async () => {
     try {
       const response = await axios.post(
-        `https://elarning.onrender.com/api/addnote`,
+        `http://localhost:3000/api/addnote`,
         {
           title: course.title,
           note: notesInput,
@@ -136,7 +136,7 @@ export default function CourseDetailPage() {
   const deleteNote = async (id) => {
     try {
       const response = await axios.delete(
-        `https://elarning.onrender.com/api/deletenote/${id}`,
+        `http://localhost:3000/api/deletenote/${id}`,
         {
           headers: {
             Authorization: `Bearer ${

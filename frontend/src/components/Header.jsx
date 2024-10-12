@@ -90,7 +90,7 @@ function Header() {
               }}
             >
               <Link to="/" className="text-black">
-                Elearning
+                EduFly
               </Link>
             </Typography>
 
@@ -149,7 +149,7 @@ function Header() {
               }}
             >
               <Link to="/" className="text-black">
-                Elearning
+                EduFly
               </Link>
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>

@@ -21,6 +21,7 @@ export default function HomePage() {
     }
 
     let category = JSON.parse(localStorage.getItem("user")).role;
+    category=category.toLowerCase();
     const query = `*[_type == "courses" && category =="${category}"]`;
     const courses = await client.fetch(query);
     // console.log(courses);

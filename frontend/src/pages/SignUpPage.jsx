@@ -29,7 +29,7 @@ export default function SignUpPage() {
     try {
       setLoading(true);
 
-      const response = await axios.post(`https://elarning.onrender.com/api/signup`, {
+      const response = await axios.post(`http://localhost:3000/api/signup`, {
         name,
         email,
         password,
