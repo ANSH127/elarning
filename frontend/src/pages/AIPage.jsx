@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Loadar from "../components/Loadar";
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
-const genAI = new GoogleGenerativeAI("AIzaSyCcRICIUjD_jMBZBYVWHhL7qtqs_rlYXwM");
+const genAI = new GoogleGenerativeAI("AIzaSyAEman7ngofIfa1g60hSNocLHRvi32cPGQ");
 let chat;
 
 export default function AIPage() {
